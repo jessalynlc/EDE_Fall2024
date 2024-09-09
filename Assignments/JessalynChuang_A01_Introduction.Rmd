@@ -1,6 +1,6 @@
 ---
 title: "Assignment 1: Introduction"
-author: "Student Name"
+author: "Jessalyn Chuang"
 output: pdf_document
 ---
 
@@ -22,22 +22,21 @@ Enter answers to the questions just below the >Answer: prompt.
 
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
-> Answer: 
+> Answer: In undergrad, I had many classes that involved analyzing large quantities of data, and had some formal training in data analytics with classes such as Environmental Data Analysis and Modeling, where I was shown examples in R but never received R training prior to seeing the examples, and Machine Learning for Environmental Engineers and Scientists, where I had to use Git Hub to upload my final project, but I was never taught the Git workflow that we have been shown inthis class! In my work, I also analyzed large quantities of energy market data, but did so mostly using Python and Excel. 
 
 2. Are there any components of the course about which you feel confident?
 
-> Answer: 
+> Answer: I have taken coding classes for other languages, so I feel confident that I will be able to pick up R and understand the basic structure of it.
 
 3. Are there any components of the course about which you feel apprehensive?
 
-> Answer: 
-
+> Answer: Getting a hang of the R/Git workflow process and potentially encountering data that might be hard to comprehend!
 
 ## 2) GitHub
 
 Provide a link below to your forked course repository in GitHub. Make sure you have pulled all recent changes from the course repository and that you have updated your course README file, committed those changes, and pushed them to your GitHub account. 
 
-> Answer: 
+> Answer: https://github.com/jessalynlc/EDE_Fall2024
 
 ## 3) Knitting
-When you have completed this document, click the `knit` button.This should produce a PDF copy of your markdown document. Submit this PDF to Canvas 
+When you have completed this document, click the `knit` button.This should produce a PDF copy of your markdown document. Submit this PDF to Canvas  
