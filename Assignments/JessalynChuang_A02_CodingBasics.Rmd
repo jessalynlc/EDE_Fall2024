@@ -127,7 +127,7 @@ greater_than_50_v2(test_scores)
 
 14. QUESTION: Which option of `if`...`else` vs. `ifelse` worked? Why? (Hint: search the web for "R vectorization")
 
-> Answer: Ifelse is vectorized, which means that the function is capable of evaluating each element of a vector and returning a vectorized output ("R ifelse() Function," n.d.). If...else is not vectorized, and therefore is expecting a single value and will return an error. 
+> Answer: Ifelse worked and if...else did not. Ifelse is vectorized, which means that the function is capable of evaluating each element of a vector and returning a vectorized output ("R ifelse() Function," n.d.). If...else is not vectorized, and therefore is expecting a single value and will return an error. 
 
 > Citation: R ifelse() Function. (n.d.). Retrieved September 16, 2024, from https://www.programiz.com/r/ifelse-function
 
