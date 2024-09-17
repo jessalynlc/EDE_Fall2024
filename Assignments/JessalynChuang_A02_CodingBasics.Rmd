@@ -86,7 +86,7 @@ student_df
 
 9.  QUESTION: How is this data frame different from a matrix?
 
-> Answer: Vectors are 1-dimensional and can only have a single row or column of data. Matrices are two-dimensional and can have multiple numbers of rows and columns.
+> Answer: This data frame is different from a matrix because it contains heterogeneous data and is a list of vectors of equal length. Meanwhile, matrices can only contain homogenous data. Data frames are better for visualizing data tables.
 
 10. Create a function with one input. In this function, use `if`...`else` to evaluate the value of the input: if it is greater than 50, print the word "Pass"; otherwise print the word "Fail". 
 
