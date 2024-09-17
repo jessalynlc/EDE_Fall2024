@@ -1,6 +1,6 @@
 ---
 title: "Assignment 2: Coding Basics"
-author: "Student Name"
+author: "Jessalyn Chuang"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -32,10 +32,19 @@ This exercise accompanies the lessons/labs in Environmental Data Analytics on co
 
 ```{r basics 1}
 #1. 
+seq1_55 = seq(1,55,5)
 
 #2. 
 
+mean1_55 = mean(seq1_55)
+median1_55 = median(seq1_55)
+
+mean1_55
+median1_55
+
 #3. 
+
+mean1_55 > median1_55
 
 ```
 
@@ -50,13 +59,20 @@ This exercise accompanies the lessons/labs in Environmental Data Analytics on co
 8.  Label the columns of your data frame with informative titles.
 
 ```{r basics 2}
+#Character vector that contains names of students
+student_names <- c("Hermione", "Harry", "Ron", "Malfoy")
 
+#Numeric vector that contains test scores
+test_scores <- c(100, 85, 75, 65)
+
+#Logical vector that contains information on whether they are on scholarship or not
+scholarship_status <- c(TRUE, TRUE, TRUE, FALSE)
 
 ```
 
 9.  QUESTION: How is this data frame different from a matrix?
 
-> Answer:
+> Answer: Vectors are 1-dimensional and can only have a single row or column of data. Matrices are two-dimensional and can have multiple numbers of rows and columns.
 
 10. Create a function with one input. In this function, use `if`...`else` to evaluate the value of the input: if it is greater than 50, print the word "Pass"; otherwise print the word "Fail". 
 
