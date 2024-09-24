@@ -33,15 +33,19 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Ex
 1.  Load necessary packages (tidyverse, lubridate, here), check your current working directory and upload two datasets: the ECOTOX neonicotinoid dataset (ECOTOX_Neonicotinoids_Insects_raw.csv) and the Niwot Ridge NEON dataset for litter and woody debris (NEON_NIWO_Litter_massdata_2018-08_raw.csv). Name these datasets "Neonics" and "Litter", respectively. Be sure to include the subcommand to read strings in as factors.
 
 ```{r Load packages and upload datasets,  message = FALSE}
+#Loading packages for tidyverse, lubridate, and here
 library(tidyverse)
 library(lubridate)
 library(here)
+#Command points to the project directory
 here()
 
+#upload Neonics dataset
 Neonics <- read.csv(
   file = here("./Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv"),
   stringsAsFactors = TRUE)   
 
+#upload Litter dataset
 Litter <- read.csv(
   file = here("./Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv"),
   stringsAsFactors = TRUE)  
@@ -61,7 +65,11 @@ provide insights that inform policies around the pesticide's usage. Ultimately,
 this research can play a pivotal role in promoting sustainable agricultural 
 practices, safeguarding public helath, and preserving biodiversity. (NRDC, 2022)
 
-> https://www.nrdc.org/stories/neonicotinoids-101-effects-humans-and-bees
+> Natural Resources Defense Council. (2002, May 25). Neonicotinoids 101: The 
+effects on humans and bees. NRDC. 
+https://www.nrdc.org/stories/neonicotinoids-101-effects-humans-and-bees
+
+
 
 3.  The Niwot Ridge litter and woody debris dataset was collected from the National Ecological Observatory Network, which collectively includes 81 aquatic and terrestrial sites across 20 ecoclimatic domains. 32 of these sites sample forest litter and woody debris, and we will focus on the Niwot Ridge long-term ecological research (LTER) station in Colorado. Why might we be interested in studying litter and woody debris that falls to the ground in forests? Feel free to do a brief internet search if you feel you need more background information.
 
@@ -74,7 +82,11 @@ Additionally, monitoring litter and debris over time helps assess ecological
 changes due to climate change and land-use practices, informing adaptive 
 management strategies for forest conservation.
 
->https://www.srs.fs.usda.gov/pubs/gtr/gtr_srs038/gtr_srs038-scheungrab001.pdf
+>Scheungrab, M. J., & Olson, R. L. (2002). Silvicultural practices in the South 
+to achieve sustainability of wildlife habitats and diversity (General Technical 
+Report SRS-038). U.S. Department of Agriculture, Forest Service, Southern 
+Research Station. 
+https://www.srs.fs.usda.gov/pubs/gtr/gtr_srs038/gtr_srs038-scheungrab001.pdf
 
 4.  How is litter and woody debris sampled as part of the NEON network? Read the NEON_Litterfall_UserGuide.pdf document to learn more. List three pieces of salient information about the sampling methods here:
 
@@ -92,6 +104,7 @@ management strategies for forest conservation.
 
 ```{r dimensions of Neonics dataset}
 
+#Returns dimensions of Neonics which is 4623 rows by 30 columns
 dim(Neonics)
 
 ```
@@ -100,6 +113,7 @@ dim(Neonics)
 
 ```{r sort Neonics Effect column}
 
+#Returns the most common effects of Neonics studied
 sort(summary(Neonics$Effect), decreasing = TRUE)
 
 ```
@@ -114,23 +128,27 @@ reveal direct toxic effects that could lead to population decline.
 
 ```{r Six most commonly studied species}
 
+# The top 7 most frequently studied species were selected from 
+#Species.Common.Name because maxsum aggregates the remaining species under 
+#"Other" and includes it in the ranking.
 summary(Neonics$Species.Common.Name, maxsum = 7)
 
 ```
 
-> Answer: Besides species categorized as "Other", the top six most commonly 
-studied include: (1) Honey Bee (2) Parasitic Wasp (3) Buff Tailed Bumblebee 
-(4) Carniolan Honey Bee (5) Bumble Bee (6) Italian Honeybee. Honey bees, bumble 
-bees, and their subspecies are pollinators. All of these species are pollinators 
-and might be of interest over other insects because they are crucial to crop 
-pollinaton, and as a result, global food production. They are also important 
-indicators of ecosystem health. The decline of these species may have 
-significant ecological and economic consequences.
+> Answer: The top six most commonly studied include: (1) Honey Bee 
+(2) Parasitic Wasp (3) Buff Tailed Bumblebee (4) Carniolan Honey Bee (5) Bumble 
+Bee (6) Italian Honeybee. Honey bees, bumble bees, and their subspecies are 
+pollinators. All of these species are pollinators and might be of interest over 
+other insects because they are crucial to crop pollinaton, and as a result, 
+global food production. They are also important indicators of ecosystem health. 
+The decline of these species may have significant ecological and economic 
+consequences.
 
 8.  Concentrations are always a numeric value. What is the class of `Conc.1..Author.` column in the dataset, and why is it not numeric? [Tip: Viewing the dataframe may be helpful...]
 
 ```{r class of Conc.1..Author}
 
+#Call upon the class of Conc.1..Author column, which returns "factor"
 class(Neonics$Conc.1..Author.)
 
 ```
@@ -145,6 +163,8 @@ treat the entire column as a factor.
 
 ```{r Plot of number of studies each publication year}
 
+#Creation of geom_freqpoly that shows number of studies conducted by 
+#publication year
 ggplot(Neonics,aes(x=Publication.Year))+
   geom_freqpoly()
 
@@ -154,6 +174,8 @@ ggplot(Neonics,aes(x=Publication.Year))+
 
 ```{r Plot of number of studies each publication year that falls in a different Test Location}
 
+#Breaks apart the studies per publication year into how many of each type of 
+#Test.Location in each public year
 ggplot(Neonics,aes(x=Publication.Year,color = Test.Location))+
   geom_freqpoly()
 
@@ -174,6 +196,7 @@ seeing similar counts.
 
 ```{r bar graph of Endpoint counts}
 
+#Creation of a geom_bar graph of Endpoint counts
 ggplot(Neonics,aes(x=Endpoint))+ 
   geom_bar()+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
@@ -194,10 +217,14 @@ from responses of controls).
 
 ```{r change type of collectDate to date type}
 
+#Check class of collectDate before class transformation. It is a "factor" to
+#start
 class(Litter$collectDate)
+#Use of lubridate to change the collectDate column to date type
 Litter$collectDate <- ymd(Litter$collectDate)
+#new class is "Date"
 class(Litter$collectDate)
-
+#Returns the unique dates that are in the collectDate column
 unique(Litter$collectDate)
 
 ```
@@ -205,7 +232,7 @@ unique(Litter$collectDate)
 13. Using the `unique` function, determine how many different plots were sampled at Niwot Ridge. How is the information obtained from `unique` different from that obtained from `summary`?
 
 ```{r number of different plots sampled at Niwot Ridge}
-
+#Returns the unique plotIDs in Litter
 unique(Litter$plotID)
 ```
 
@@ -216,7 +243,7 @@ shows up.
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 
 ```{r bar graph of functionalGroup counts}
-
+#bar graph of functionalGroup counts
 ggplot(Litter, aes(x = functionalGroup))+
   geom_bar()+
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
@@ -225,11 +252,11 @@ ggplot(Litter, aes(x = functionalGroup))+
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup.
 
 ```{r boxplot and violin plot of dryMass by functionalGroup}
-
+#box plot creation of dryMass by functionalGroup
 ggplot(Litter)+
   geom_boxplot(aes(x = functionalGroup, y = dryMass))+
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
-
+#violin plot creation of dryMass by functionalGroup
 ggplot(Litter)+
   geom_violin(aes(x = functionalGroup, y = dryMass))+
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
