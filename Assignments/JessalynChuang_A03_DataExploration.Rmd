@@ -164,9 +164,11 @@ treat the entire column as a factor.
 ```{r Plot of number of studies each publication year}
 
 #Creation of geom_freqpoly that shows number of studies conducted by 
-#publication year
+#publication year. Binwidth was set to 3 to be able to smooth out the curve
+#helps lessen the visual "spikiness" that comes with years with less data
+#or "NR" values
 ggplot(Neonics,aes(x=Publication.Year))+
-  geom_freqpoly()
+  geom_freqpoly(binwidth = 3)
 
 ```
 
@@ -175,20 +177,16 @@ ggplot(Neonics,aes(x=Publication.Year))+
 ```{r Plot of number of studies each publication year that falls in a different Test Location}
 
 #Breaks apart the studies per publication year into how many of each type of 
-#Test.Location in each public year
+#Test.Location in each public year.Binwidth was set to 3 to be able to smooth 
+#out the curve again.
 ggplot(Neonics,aes(x=Publication.Year,color = Test.Location))+
-  geom_freqpoly()
+  geom_freqpoly(binwidth = 3)
 
 ```
 
 Interpret this graph. What are the most common test locations, and do they differ over time?
 
-> Answer: The most common test locations seem to be "Lab" and "Field Natural".
-These two have interchanged in terms of which has the highest count. Between
-1990-2000, more of teh test locations were in "Field Natural", but then they
-switched back and forth a few times between 2000-2010, before Lab test locations
-soared for most of 2010-2020. But the latter end of this decade shows both
-seeing similar counts.
+> Answer: The most common test locations seem to be "Lab" and "Field Natural". These two have interchanged in terms of which has the highest count. Between 1990-2000, more of the test locations were in "Field Natural", but this soon switched between 2000-2010, when the Lab Test.Location became more common. Lab also soared above Field Natural during 2010-2020.
 
 11. Create a bar graph of Endpoint counts. What are the two most common end points, and how are they defined? Consult the ECOTOX_CodeAppendix for more information. 
 
