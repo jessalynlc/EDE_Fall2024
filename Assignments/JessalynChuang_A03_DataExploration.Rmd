@@ -265,10 +265,7 @@ ggplot(Litter)+
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
 
-> Answer: The boxplot is more effective here because the actual amount of values
-in each functionalGroup is small, and since the width is proportional to the
-amount of values, the width will also be small for each functionalGroup in the
-violin plot.
+> Answer: The boxplot is more effective in this case because it provides a clear summary of key statistical measures (median, quartiles, and potential outliers) without being affected by the small sample size within each functionalGroup. In contrast, the violin plot includes a density estimate that can become misleading when the number of observations is small. Since the width of the violin plot is proportional to the density of values, small sample sizes may result in inaccurate or overly smoothed density shapes, making it harder to interpret the distribution properly. The boxplot, by focusing on summary statistics, offers a cleaner and more accurate representation of the data distribution for small groups.
 
 What type(s) of litter tend to have the highest biomass at these sites?
 
