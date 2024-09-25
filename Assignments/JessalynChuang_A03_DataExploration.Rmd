@@ -232,6 +232,7 @@ unique(Litter$collectDate)
 ```{r number of different plots sampled at Niwot Ridge}
 #Returns the unique plotIDs in Litter
 unique(Litter$plotID)
+summary(Litter$plotID)
 ```
 
 > Answer: 12 different plots were sampled at Niwot Ridge. While unique()
