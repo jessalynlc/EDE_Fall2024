@@ -200,3 +200,7 @@ write.csv(NTL.PeterPaul.summaries, row.names = FALSE,
 ## Alternative Methods for Data Wrangling
 
 If you want to iteratively perform operations on your data, there exist several options. We have demonstrated the pipe as one option. Additional options include the `apply` function (https://www.rdocumentation.org/packages/base/versions/3.5.2/topics/apply) and `for` loops (https://swcarpentry.github.io/r-novice-inflammation/15-supp-loops-in-depth/). These options are good options as well (again, multiple ways to get to the same outcome). A word of caution: loops are slow. This may not make a difference for small datasets, but small time additions will make a difference with large datasets.
+
+Shortcuts:
+Alt + - gives you <- 
+ctr shift M gives you %>% 
