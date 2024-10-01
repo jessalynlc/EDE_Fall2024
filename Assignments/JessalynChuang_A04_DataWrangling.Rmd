@@ -95,7 +95,7 @@ EPAair_PM25_NC2018_temp <- select(EPAair_PM25_NC2018, Date, DAILY_AQI_VALUE,
 EPAair_PM25_NC2019_temp <- select(EPAair_PM25_NC2019, Date, DAILY_AQI_VALUE, 
                                   Site.Name, AQS_PARAMETER_DESC, COUNTY, 
                                   SITE_LATITUDE, SITE_LONGITUDE)
-#EPAair_PM25_NC2019_temp <- EPAair_PM25_NC2019
+
 #5
 EPAair_PM25_NC2018_temp <- mutate(EPAair_PM25_NC2018_temp, 
                                   AQS_PARAMETER_DESC = "PM2.5")
@@ -157,10 +157,12 @@ EPAair_data <- rbind(NC2018_processed, NC2018_PM25_processed, NC2019_processed,
 
 #8 
 EPAair_subset <- EPAair_data %>% 
-  filter(Site.Name %in% c( "Linville Falls", "Durham Armory", "Leggett", "Hattie Avenue",  
-  "Clemmons Middle", "Mendenhall School", "Frying Pan Mountain", 
-  "West Johnston Co.", "Garinger High School", "Castle Hayne", 
-  "Pitt Agri. Center", "Bryson City", "Millbrook School" )) %>% 
+  filter(Site.Name %in% c( "Linville Falls", "Durham Armory", "Leggett", 
+                           "Hattie Avenue","Clemmons Middle", 
+                           "Mendenhall School", "Frying Pan Mountain", 
+                           "West Johnston Co.", "Garinger High School", 
+                           "Castle Hayne", "Pitt Agri. Center", "Bryson City", 
+                           "Millbrook School" )) %>% 
   group_by(Date, Site.Name, AQS_PARAMETER_DESC, COUNTY) %>% 
   summarise(mean_AQI = mean(DAILY_AQI_VALUE),
             mean_latitude = mean(SITE_LATITUDE),
