@@ -1,6 +1,6 @@
 ---
 title: "Assignment 5: Data Visualization"
-author: "Student Name"
+author: "Jessalyn Chuang"
 date: "Fall 2024"
 output: pdf_document
 geometry: margin=2.54cm
@@ -32,8 +32,14 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Vi
 
 ```{r initialize project}
 #1 
+library(tidyverse);library(lubridate);library(here); library(cowplot)
+here()
+#2
+PeterPaul.chem.nutrients <- 
+  read.csv(here("Data/Processed_KEY/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv"), stringsAsFactors = TRUE)
 
-#2 
+Niwot_Ridge_litter <- 
+  read.csv(here("Data/Processed_KEY/NEON_NIWO_Litter_mass_trap_Processed.csv"), stringsAsFactors = TRUE)
 
 ```
 ## Define your theme
@@ -46,7 +52,9 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Vi
 
 ```{r build plot theme}
 #3
-
+mytheme <- theme_light() +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "right")
 ```
 
 ## Create graphs
@@ -56,7 +64,15 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 
 ```{r plot total P vs PO4}
 #4 
+q4 <- PeterPaul.chem.nutrients %>% 
+  ggplot(mapping = aes(x = po4, y = tp_ug, color = lakename)) +
+  geom_point() +
+  xlim(0,50) + 
+  geom_smooth(method = lm, se = FALSE) +
+  mytheme +
+  labs(color="Lake name") 
 
+print(q4)
 ```
 
 
@@ -71,6 +87,43 @@ Tips:
 ```{r Create boxplots}
 #5 
 
+#Convert month to a factor -- with 12 levels, labelled with month names
+PeterPaul.chem.nutrients$month <- factor(PeterPaul.chem.nutrients$month, 
+                                         levels = 1:12, 
+                                         labels = month.abb)
+
+boxplot_temp <- ggplot(PeterPaul.chem.nutrients, aes(x = month, 
+                      y = temperature_C,
+                      color=lakename)) +
+                geom_boxplot() +
+                scale_x_discrete(drop = F) +
+                mytheme +
+                labs(color="Lake name") +
+                theme(axis.title.x = element_blank(),
+                      legend.position = "top")
+
+boxplot_TP <- ggplot(PeterPaul.chem.nutrients, aes(x = month, 
+                      y = tp_ug,
+                      color=lakename)) +
+              geom_boxplot() +
+              scale_x_discrete(drop = F) +
+              mytheme +
+              labs(color="Lake name") +
+              theme(axis.title.x = element_blank(), 
+                    legend.position = "none") 
+              
+
+boxplot_TN <- ggplot(PeterPaul.chem.nutrients, aes(x = month, 
+                      y = tn_ug,
+                      color=lakename)) +
+              geom_boxplot() +
+              scale_x_discrete(drop = F) +
+              mytheme +
+              labs(color="Lake name") +
+              theme(legend.position = "none")
+
+plot_grid(boxplot_temp, boxplot_TP, boxplot_TN, 
+          nrow = 3, align = 'h', rel_heights = c(1, 1, 1))
 ```
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
