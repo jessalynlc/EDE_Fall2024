@@ -32,14 +32,22 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Vi
 
 ```{r initialize project}
 #1 
+#Load packages
 library(tidyverse);library(lubridate);library(here); library(cowplot)
 here()
 #2
+#Load in data
 PeterPaul.chem.nutrients <- 
-  read.csv(here("Data/Processed_KEY/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv"), stringsAsFactors = TRUE)
+read.csv(here("Data/Processed_KEY/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv"),
+         stringsAsFactors = TRUE)
 
 Niwot_Ridge_litter <- 
-  read.csv(here("Data/Processed_KEY/NEON_NIWO_Litter_mass_trap_Processed.csv"), stringsAsFactors = TRUE)
+  read.csv(here("Data/Processed_KEY/NEON_NIWO_Litter_mass_trap_Processed.csv"), 
+           stringsAsFactors = TRUE)
+
+#turn date columns into date format using lubridate
+PeterPaul.chem.nutrients$sampledate <- ymd(PeterPaul.chem.nutrients$sampledate)
+Niwot_Ridge_litter$collectDate <- ymd(Niwot_Ridge_litter$collectDate)
 
 ```
 ## Define your theme
@@ -52,6 +60,9 @@ Niwot_Ridge_litter <-
 
 ```{r build plot theme}
 #3
+#I chose theme_light() as the base, axis text as set to being black,
+#axis titles were set to size 14 with the color of gray, and the legend
+#was set to be on the right side in mytheme
 mytheme <- theme_light() +
   theme(axis.text = element_text(color = "black"),
         axis.title.x = element_text(size = 14, color = "gray"),  
@@ -66,14 +77,19 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 
 ```{r plot total P vs PO4}
 #4 
+#From the PeterPaul dataset, plot po4 as the x axis and tp_ug as the y axis
+#with the color based on the lake name.
+#geom_smooth was used to draw the lines of best fit
 q4 <- PeterPaul.chem.nutrients %>% 
   ggplot(mapping = aes(x = po4, y = tp_ug, color = lakename)) +
   geom_point() +
   xlim(0,50) + 
-  geom_smooth(method = lm, se = FALSE) +
+  geom_smooth(method = lm, se = TRUE) +
   mytheme +
-  labs(color="Lake name") +
-  ggtitle("Total Phosphorus by Phosphate") +
+  labs(color="Lake name", 
+       title = "Total Phosphorus by Phosphate",
+       x = "Phosphate",
+       y = "Total Phosphorus [ug]") +
   theme(plot.title = element_text(hjust = 0.5))
 
 print(q4)
@@ -88,7 +104,7 @@ Tips:
 * Setting a legend's position to "none" will remove the legend from a plot.
 * Individual plots can have different sizes when combined using `cowplot`.
 
-```{r Create boxplots}
+```{r Create boxplots, fig.height= 10}
 #5 
 
 #Convert month to a factor -- with 12 levels, labelled with month names
@@ -96,38 +112,49 @@ PeterPaul.chem.nutrients$month <- factor(PeterPaul.chem.nutrients$month,
                                          levels = 1:12, 
                                          labels = month.abb)
 
+#month vs temperature boxplot created
 boxplot_temp <- ggplot(PeterPaul.chem.nutrients, aes(x = month, 
                       y = temperature_C,
                       color=lakename)) +
                 geom_boxplot() +
                 scale_x_discrete(drop = F) +
-                mytheme +
-                labs(color="Lake name") +
+                labs(title = "Monthly Temperatures of Peter and Paul Lake",
+                     color="Lake name",
+                     y = "Temperature [C]") +
+                mytheme+
                 theme(axis.title.x = element_blank(),
-                      legend.position = "none") +
-                ggtitle("Characteristics of Peter and Paul Lake") +
-                theme(plot.title = element_text(hjust = 0.5))
+                      legend.position = "none",
+                      plot.title = element_text(hjust = 0.5))
 
+#month vs tp_ug boxplot created, the x axis is hidden for this graph
 boxplot_TP <- ggplot(PeterPaul.chem.nutrients, aes(x = month, 
                       y = tp_ug,
                       color=lakename)) +
               geom_boxplot() +
               scale_x_discrete(drop = F) +
               mytheme +
-              labs(color="Lake name") +
+              labs(title = "Monthly Total Phosphorus Concentrations of Peter and Paul Lake",
+                   color="Lake name", 
+                   y = "Total phosphorus [ug]") +
               theme(axis.title.x = element_blank(), 
-                    legend.position = "none") 
+                    legend.position = "none",
+                    plot.title = element_text(hjust = 0.5))
               
-
+#month vs tn_ug boxplot created, the x axis is hidden for this graph, and
+#the legend was added at the bottom of this graph
 boxplot_TN <- ggplot(PeterPaul.chem.nutrients, aes(x = month, 
                       y = tn_ug,
                       color=lakename)) +
               geom_boxplot() +
               scale_x_discrete(drop = F) +
               mytheme +
-              labs(color="Lake name") +
-              theme(legend.position = "bottom")
+              labs(title = "Monthly Total Nitrogen Concentrations of Peter and Paul Lake",
+                   color="Lake name", 
+                   y = "Total nitrogen [ug]") +
+              theme(legend.position = "bottom",
+                    plot.title = element_text(hjust = 0.5))
 
+#use plot_grid from the cowplot package to arrange plots into three rows
 plot_grid(boxplot_temp, boxplot_TP, boxplot_TN, 
           nrow = 3, align = 'h', rel_heights = c(1, 1, 1))
 ```
@@ -142,31 +169,41 @@ Question: What do you observe about the variables of interest over seasons and b
 
 ```{r Plot litter}
 #6
+#from the Niwot_Ridge_litter data, filter to keep only the Needles functional
+#group, plot collectDate on the x axis, dryMass on the y axis, and color points
+#by nlcdClass
 litter_Needles <- Niwot_Ridge_litter %>% 
                   filter(functionalGroup == "Needles") %>% 
                   ggplot(aes(x=collectDate, y=dryMass, color = nlcdClass))+
                   geom_point()+
                   mytheme+
-                  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-                  ggtitle("Dry mass of needle litter by date") +
-                  theme(plot.title = element_text(hjust = 0.5))
+                  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+                  plot.title = element_text(hjust = 0.5))+
+                  labs(title = "Dry Mass of Needle Litter by Date",
+                       x = "Collect Date",
+                       y = "Dry Mass",
+                       color = "NLCD Class")
 
 print(litter_Needles)
 
 #7
-
+#This shows the same data above, but now the data is faceted with facet_wrap
+#to show each nlcdClass on a separate graph
 litter_Needles_2 <- Niwot_Ridge_litter %>% 
                   filter(functionalGroup == "Needles") %>% 
                   ggplot(aes(x=collectDate, y=dryMass))+
                   geom_point()+
                   facet_wrap(facets = vars(nlcdClass), nrow=1,ncol=3) +
                   mytheme+
-                  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-                  ggtitle("Dry mass of needle litter by date") +
-                  theme(plot.title = element_text(hjust = 0.5))
+                  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+                        plot.title = element_text(hjust = 0.5))+
+                  labs(title = "Dry Mass of Needle Litter by Date",
+                       x = "Collect Date",
+                       y = "Dry Mass",
+                       color = "NLCD Class")
 
 print(litter_Needles_2)
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer: Plot 7 is more effective because it helps to compare the distribution within each NLCD class individually without the distraction of overlapping points from other classes.
+> Answer: It depends on what you are trying to study. If the goal is to compare the trends of dry mass between the three land cover types directly and with each other, then plot 6 is more effective as the colors allow for a direct comparison in a unified space. If the goal is to focus on the internal distribution of dry mass for each land cover type independently, plot 7 is more effective, as each category is isolated, making it easier to see patterns or anomalies within that specific class.
