@@ -53,7 +53,9 @@ Niwot_Ridge_litter <-
 ```{r build plot theme}
 #3
 mytheme <- theme_light() +
-  theme(axis.text = element_text(color = "black"), 
+  theme(axis.text = element_text(color = "black"),
+        axis.title.x = element_text(size = 14, color = "gray"),  
+        axis.title.y = element_text(size = 14, color = "gray"), 
         legend.position = "right")
 ```
 
@@ -70,7 +72,9 @@ q4 <- PeterPaul.chem.nutrients %>%
   xlim(0,50) + 
   geom_smooth(method = lm, se = FALSE) +
   mytheme +
-  labs(color="Lake name") 
+  labs(color="Lake name") +
+  ggtitle("Total Phosphorus by Phosphate") +
+  theme(plot.title = element_text(hjust = 0.5))
 
 print(q4)
 ```
@@ -100,7 +104,9 @@ boxplot_temp <- ggplot(PeterPaul.chem.nutrients, aes(x = month,
                 mytheme +
                 labs(color="Lake name") +
                 theme(axis.title.x = element_blank(),
-                      legend.position = "top")
+                      legend.position = "none") +
+                ggtitle("Characteristics of Peter and Paul Lake") +
+                theme(plot.title = element_text(hjust = 0.5))
 
 boxplot_TP <- ggplot(PeterPaul.chem.nutrients, aes(x = month, 
                       y = tp_ug,
@@ -120,7 +126,7 @@ boxplot_TN <- ggplot(PeterPaul.chem.nutrients, aes(x = month,
               scale_x_discrete(drop = F) +
               mytheme +
               labs(color="Lake name") +
-              theme(legend.position = "none")
+              theme(legend.position = "bottom")
 
 plot_grid(boxplot_temp, boxplot_TP, boxplot_TN, 
           nrow = 3, align = 'h', rel_heights = c(1, 1, 1))
@@ -128,7 +134,7 @@ plot_grid(boxplot_temp, boxplot_TP, boxplot_TN,
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
 
-> Answer: 
+> Answer: Both lakes have similar temperature trends, and temperature increases from May, peaks in the summer months, then drops again by October. Peter Lake has higher phosphorus concentrations than Paul Lake, while Paul Lake has lower variability in phosphorus concentrations compared to Peter Lake. Total Phosphorus concentrations seem to peak in July - Sep. Peter Lake also has higher nitrogen concentrations compared to Paul Lake. The variability in nitrogen concentrations is greater in Peter Lake considering the larger spread of the outlier points for Peter Lake compare to Paul Lake's outlier points. Total nitrogen concentrations also increase starting in May and remain elevated throughout the summer until September.
 
 6. [Niwot Ridge] Plot a subset of the litter dataset by displaying only the "Needles" functional group. Plot the dry mass of needle litter by date and separate by NLCD class with a color aesthetic. (no need to adjust the name of each land use)
 
@@ -136,12 +142,31 @@ Question: What do you observe about the variables of interest over seasons and b
 
 ```{r Plot litter}
 #6
+litter_Needles <- Niwot_Ridge_litter %>% 
+                  filter(functionalGroup == "Needles") %>% 
+                  ggplot(aes(x=collectDate, y=dryMass, color = nlcdClass))+
+                  geom_point()+
+                  mytheme+
+                  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+                  ggtitle("Dry mass of needle litter by date") +
+                  theme(plot.title = element_text(hjust = 0.5))
 
+print(litter_Needles)
 
 #7
 
+litter_Needles_2 <- Niwot_Ridge_litter %>% 
+                  filter(functionalGroup == "Needles") %>% 
+                  ggplot(aes(x=collectDate, y=dryMass))+
+                  geom_point()+
+                  facet_wrap(facets = vars(nlcdClass), nrow=1,ncol=3) +
+                  mytheme+
+                  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+                  ggtitle("Dry mass of needle litter by date") +
+                  theme(plot.title = element_text(hjust = 0.5))
 
+print(litter_Needles_2)
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer:
+> Answer: Plot 7 is more effective because it helps to compare the distribution within each NLCD class individually without the distraction of overlapping points from other classes.
