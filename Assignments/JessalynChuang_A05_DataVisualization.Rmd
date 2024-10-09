@@ -87,7 +87,7 @@ q4 <- PeterPaul.chem.nutrients %>%
   geom_smooth(method = lm, se = TRUE) +
   mytheme +
   labs(color="Lake name", 
-       title = "Total Phosphorus by Phosphate",
+       title = "Total Phosphorus by Phosphate [ug]",
        x = "Phosphate",
        y = "Total Phosphorus [ug]") +
   theme(plot.title = element_text(hjust = 0.5))
@@ -181,7 +181,7 @@ litter_Needles <- Niwot_Ridge_litter %>%
                   plot.title = element_text(hjust = 0.5))+
                   labs(title = "Dry Mass of Needle Litter by Date",
                        x = "Collect Date",
-                       y = "Dry Mass",
+                       y = "Dry Mass [g]",
                        color = "NLCD Class")
 
 print(litter_Needles)
@@ -199,7 +199,7 @@ litter_Needles_2 <- Niwot_Ridge_litter %>%
                         plot.title = element_text(hjust = 0.5))+
                   labs(title = "Dry Mass of Needle Litter by Date",
                        x = "Collect Date",
-                       y = "Dry Mass",
+                       y = "Dry Mass [g]",
                        color = "NLCD Class")
 
 print(litter_Needles_2)
