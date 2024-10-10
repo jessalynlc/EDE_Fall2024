@@ -1,0 +1,31 @@
+---
+title: Interactive Rmd
+output: html_document
+runtime: shiny
+---
+  
+```{r, echo = FALSE}
+#numericInput generates the widget that appears
+numericInput(
+  #n is the numeric identifier for input
+  inputId = "n",
+  label = "How many cars?", 
+  #default starting value
+  value = 5)
+
+numericInput(
+  #n is the numeric identifier for input
+  inputId = "h",
+  label = "How many cars?", 
+  #default starting value
+  value = 15)
+
+#in the app that pops up, there will be something that displays an output
+#cars dataframe is built into r
+#head command shows first few records in the dataframe
+#looks for input with id n
+renderTable({
+head(cars, input$h - input$n)
+})
+```
+
