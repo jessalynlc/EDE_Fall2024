@@ -31,6 +31,7 @@ library(tidyverse)
 library(lubridate)
 library(agricolae)
 library(here)
+here()
 
 PeterPaul.chem.nutrients <- read.csv(
   here("Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv"), 
@@ -73,7 +74,8 @@ temperaturebydepth <-
   ggplot(july_data, aes(x = depth, y = temperature_C)) +
   ylim(0, 35) +
   geom_point() +
-  labs(x = "Depth", y = "Temperature [C]", title = "Temperature by Depth in July") +
+  labs(x = "Depth [m]", y = "Temperature [C]", 
+       title = "Temperature by Depth in July") +
   geom_smooth(method = 'lm', color = "orange")
 
 print(temperaturebydepth) 
@@ -93,12 +95,15 @@ temperaturebydepth.regression <- lm(data = july_data,
   temperature_C ~ depth)
 summary(temperaturebydepth.regression)
 
+par(mfrow = c(2,2), mar=c(4,4,4,4))
+plot(temperaturebydepth.regression)
+par(mfrow = c(1,1))
 ```
 
 
 8. Interpret your model results in words. Include how much of the variability in temperature is explained by changes in depth, the degrees of freedom on which this finding is based, and the statistical significance of the result. Also mention how much temperature is predicted to change for every 1m change in depth. 
 
-> Answer: According to the R-squared value, depth explains 73.87% of the variability of temperature.The finding is based on 9726 degrees of freedom. The coefficient for depth (-1.94621) suggests that for ever 1-meter increase in depth, the temperature is expected to decrease by approximately 1.95 deg C. This relationship is statistically significant with a p-value of less than 2e-16, well below the p<0.05 significance level. The residual standard error is 3.835, suggesting that while the model explains a large proportion of the variance, there is still some variability in temperature not captured by depth alone.
+> Answer: According to the R-squared value, depth explains 73.87% of the variability of temperature. The finding is based on 9726 degrees of freedom. The coefficient for depth (-1.94621) suggests that for ever 1-meter increase in depth, the temperature is expected to decrease by approximately 1.95 deg C. This relationship is statistically significant with a p-value of less than 2e-16, well below the p<0.05 significance level. The residual standard error is 3.835, suggesting that while the model explains a large proportion of the variance, there is still some variability in temperature not captured by depth alone.
 
 ---
 
@@ -126,7 +131,7 @@ summary(july_data.model)
 
 11. What is the final set of explanatory variables that the AIC method suggests we use to predict temperature in our multiple regression? How much of the observed variance does this model explain? Is this an improvement over the model using only depth as the explanatory variable?
 
-> Answer: The AIC method suggested to use all three variables, year4, daynum, and depth, to predict temperature in our multiple regression. This model explains 74.12% of the variance, which is a slight imporvement over the model using only depth as the explanatory variable.
+> Answer: The AIC method suggested to use all three variables, year4, daynum, and depth, to predict temperature in our multiple regression. This model explains 74.12% of the variance, which is a slight improvement over the model using only depth as the explanatory variable.
 
 
 
@@ -158,10 +163,11 @@ temperaturebydepth_2 <-
   ggplot(july_data, aes(x = depth, y = temperature_C, color = lakename)) +
   ylim(0, 35) +
   geom_point(alpha = 0.5) +
-  labs(x = "Depth", y = "Temperature [C]", 
+  labs(x = "Depth [m]", y = "Temperature [C]", 
        title = "Temperature by Depth in July for each Lake",
        color = "Lake Name") +
-  geom_smooth(method = 'lm', color = "orange", se = FALSE)
+  geom_smooth(method = 'lm', se = FALSE,
+              aes(color = lakename))
 
 print(temperaturebydepth_2) 
 
