@@ -48,9 +48,9 @@ In this exercise, we will be exploring stream gage height data in Nebraska corre
 5.    Plot the records as a map (using `mapview` or `ggplot`)
 
 ```{r Read the county data into an sf dataframe}
-#3. Read in Counties shapefile into an sf dataframe, filtering for just NE counties
+#3. Read in Counties shapefile into an sf dataframe
 counties_sf<- st_read(here('Data/Spatial/cb_2018_us_county_20m.shp')) %>% 
-  filter(STATEFP == 31) #Filter for just NC Counties
+  filter(STATEFP == 31) #Filter for just NE Counties
 
 #4. Reveal the CRS of the counties features
 st_crs(counties_sf)
@@ -114,7 +114,7 @@ glimpse(gage_sf)
 
 12.   What new field(s) appear in the sf dataframe created? What field(s), if any, disappeared?
 
->ANSWER: The geometry fild appeared, and the dec_long_va and dec_lat_va fields disappeared in the sf dataframe that was created.
+>ANSWER: The geometry field appeared, and the dec_long_va and dec_lat_va fields disappeared in the sf dataframe that was created.
 >
 
 
@@ -161,7 +161,8 @@ colnames(flow_data_df)
 
 
 #16. Join the flow data to our NWIS gage location spatial dataframe
-flow_gage_join <-  left_join(gage_sf, flow_data_df, by = c('station_nm' = 'station_nm'))
+flow_gage_join <-  left_join(gage_sf, flow_data_df, 
+                             by = c('station_nm' = 'station_nm'))
 
 #17. Show the column names in the resulting spatial dataframe
 colnames(flow_gage_join)
@@ -183,7 +184,8 @@ Now we can examine where the flooding appears most acute by visualizing gage hei
 #Map the points, sized by gage height
 MyMap_2 <- ggplot() + geom_sf(data = counties_sf, color = "black") +
   geom_sf(data = flow_gage_join, aes(color = gage_ht)) +
-  scale_color_gradient(name = "Gage Height", low = "blue", high = "red") 
+  scale_color_gradient(name = "Gage Height", low = "blue", high = "red") +
+  labs(title = "NWIS Gage Heights in Nebraska")
   
 MyMap_2
 ```
@@ -208,7 +210,8 @@ gage_transform <- st_transform(gage_sf, c = 32614)
 #21 Plot the data
 MyMap_transform <- ggplot() + 
   geom_sf(data = counties_transform, color = "purple") +
-  geom_sf(data = gage_transform, color = "orange")
+  geom_sf(data = gage_transform, color = "orange") +
+  labs(title = "Transformation of Counties and Gage Datasets")
 
 MyMap_transform
 ```
@@ -243,8 +246,11 @@ lancaster_gage_15km <- gage_transform %>%
   st_filter(ring, .predicate = st_intersects)
 
 #25 Plot
+#Red is Lancaster county, blue are the gage sites inside Lancaster,
+#green are the gage sites within 15 km of the county
 ggplot() + geom_sf(data = counties_transform, color = "black") +
-  geom_sf(data = lancaster_sf, color = "red")+
-  geom_sf(data = lancaster_gage, color = "orange") +
-  geom_sf(data = lancaster_gage_15km, color = "green")
+  geom_sf(data = lancaster_sf, color = "red", fill = "red", alpha = 0.3)+
+  geom_sf(data = lancaster_gage, color = "blue") +
+  geom_sf(data = lancaster_gage_15km, color = "green")+
+  labs(title = "NWIS Gage Locations in/near Lancaster County")
 ```
